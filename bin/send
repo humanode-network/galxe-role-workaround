@@ -1,0 +1,24 @@
+#!/bin/bash
+set -euo pipefail
+
+ARGS=()
+
+if [[ "${AUTHORIZATION:-}" != "" ]]; then
+  ARGS+=(
+    -H "Authorization: ${AUTHORIZATION}"
+  )
+fi
+
+if [[ "${ACCESS_TOKEN:-}" != "" ]]; then
+  ARGS+=(
+    -H "Access-Token: ${ACCESS_TOKEN}"
+  )
+fi
+
+ARGS+=(
+  -H 'Content-Type: application/json'
+)
+
+curl -v 'https://graphigo.prd.galaxy.eco/query' \
+  "${ARGS[@]}" \
+  --data-binary "@-"

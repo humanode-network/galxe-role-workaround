@@ -1,0 +1,100 @@
+#!/bin/bash
+set -euo pipefail
+
+make_query() {
+  cat <<-'EOF'
+mutation(
+  $name: String!
+  $description: String!
+  $referenceLink: String!
+  $curatorSpaceID: String!
+  $guildId: String!
+  $roleName: String!
+  $roleId: String!
+) {
+  credential(
+    input: {
+      name: $name
+      description: $description
+      chain: ETHEREUM
+      credType: DISCORD
+      referenceLink: $referenceLink
+      credSource: DISCORD_MEMBER
+      credDiscordMember: {
+        guildId: $guildId
+        roles: [{ RoleId: $roleId, RoleName: $roleName }]
+      }
+      curatorSpaceID: $curatorSpaceID
+    }
+  ) {
+    id
+    name
+    __typename
+  }
+}
+EOF
+}
+
+make_request_body() {
+  local VARIABLES="$1"
+  local QUERY="$2"
+
+  local FILTER
+  FILTER="$(
+    cat <<'EOF'
+{
+  "variables": $variables,
+  "query": $query
+}
+EOF
+  )"
+
+  jq \
+    --argjson variables "$VARIABLES" \
+    --arg query "$QUERY" \
+    --null-input \
+    "$FILTER"
+}
+
+make_input() {
+  local NAME="$1"
+  local DESCRIPTION="$2"
+  local REFERENCE_LINK="$3"
+  local CURATOR_SPACE_ID="$4"
+  local GUILD_ID="$5"
+  local ROLE_NAME="$6"
+  local ROLE_ID="$7"
+
+  local FILTER
+  FILTER="$(
+    cat <<'EOF'
+{
+  name: $name,
+  description: $description,
+  referenceLink: $referenceLink,
+  curatorSpaceID: $curatorSpaceID,
+  guildId: $guildId,
+  roleName: $roleName,
+  roleId: $roleId
+}
+EOF
+  )"
+
+  jq \
+    --arg name "$NAME" \
+    --arg description "$DESCRIPTION" \
+    --arg referenceLink "$REFERENCE_LINK" \
+    --arg curatorSpaceID "$CURATOR_SPACE_ID" \
+    --arg guildId "$GUILD_ID" \
+    --arg roleName "$ROLE_NAME" \
+    --arg roleId "$ROLE_ID" \
+    --null-input \
+    "$FILTER"
+}
+
+INPUT="$(make_input \
+  "$NAME" "$DESCRIPTION" "$REFERENCE_LINK" \
+  "$CURATOR_SPACE_ID" \
+  "$GUILD_ID" "$ROLE_NAME" "$ROLE_ID")"
+
+make_request_body "$INPUT" "$(make_query)"
