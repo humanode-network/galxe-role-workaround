@@ -39,4 +39,4 @@ Set your current directory to the root directory of your local clone of this rep
 bin/create-credential
 ```
 
-The script loads the `.env` file automatically.
+The command above loads the `.env` file automatically.
