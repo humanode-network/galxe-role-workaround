@@ -22,7 +22,7 @@ export NAME="..."
 export DESCRIPTION="..."
 export REFERENCE_LINK="https://discord.gg/..."
 
-export CURATOR_SPACE_ID=".."
+export CURATOR_SPACE_ID="..."
 
 export GUILD_ID="..."
 export ROLE_NAME="..."
