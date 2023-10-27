@@ -33,7 +33,7 @@ export ACCESS_TOKEN="..." #  Galxe API token
 
 ## Run the script
 
-Set your current directory to ``.
+Set your current directory to the root directory of your local clone of this repo.
 
 ```bash
 bin/create-credential
