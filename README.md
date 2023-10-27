@@ -1,5 +1,11 @@
 # Galxe Role Workaround
 
+Galxe has a bug in their system that does not allow selecting a linked role (BotBasher-powered roles for instance) via their web app UI.
+
+It is absolutely capable of working with linked roles and allows creating them via the API just fine.
+
+Here is the tooling to make the API requests that matches what the credential creation UI does, but without the needless restrictions, since you fill in the parameters however you like.
+
 ## Setup
 
 ### Install dependencies
